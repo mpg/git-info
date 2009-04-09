@@ -1,0 +1,146 @@
+\documentclass{minimal}
+\usepackage[ascii]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ted}
+
+\makeatletter
+
+% initiliasations
+
+\newcommand\GI@max@depth{5 }
+\newcommand\GI@repo@prefix{.git}
+\newcommand\GI@head@file{\GI@repo@prefix/HEAD}
+\@ifdefinable\GI@read{\let\GI@read\@inputcheck}
+
+% utils
+
+\newcommand\GI@export@macro[1]{%
+  \edef\@tempa{\endgroup
+	\def\noexpand#1{#1}}%
+  \@tempa}
+
+\newcommand\GI@safe@reading{%
+  \let\do\@makeother \dospecials
+  \catcode32 10
+  \catcode08 10
+  \endlinechar\m@ne
+  \everyeof{\noexpand}}
+
+% finding the .git dir
+
+\newcommand\GI@check@repo@prefix{%
+  \IfFileExists{./\GI@head@file}{%
+	\edef\GI@repo@prefix{./\GI@repo@prefix}%
+	}{%
+	\GI@set@repo@prefix}}
+
+\newcommand\GI@set@repo@prefix{%
+  \begingroup \count@\GI@max@depth
+  \GI@set@repo@prefix@}
+
+\newcommand\GI@set@repo@prefix@{%
+  \advance\count@\m@ne
+  \ifnum\count@<\z@
+	\expandafter\GI@not@a@git@repo
+  \else
+	\edef\GI@repo@prefix{../\GI@repo@prefix}%
+	\IfFileExists{\GI@head@file}{%
+	  \GI@export@macro\GI@repo@prefix
+	  }{%
+	  \expandafter\GI@set@repo@prefix@}%
+  \fi}
+
+\newcommand\GI@not@a@git@repo{%
+  \endgroup
+  \PackageError{git-info}{%
+	Current directory is not a git repository}{%
+	Check the manual for details.}%
+  \endinput}
+
+% finding the path to head
+
+\newcommand\GI@get@head@path{%
+  \openin\GI@read\GI@head@file
+  \begingroup \GI@safe@reading
+  \read\GI@read to\GI@head@file@contents
+  \GI@export@macro\GI@head@file@contents
+  \closein\GI@read
+  \expandafter\GI@set@head@path\GI@head@file@contents\@nil}
+
+\@ifdefinable\GI@set@head@path{%
+  \begingroup 
+  \GI@safe@reading
+  \edef\@tempa{\endgroup
+	\def\noexpand\GI@set@head@path\scantokens{ref:} }
+  \@tempa#1\@nil{\def\GI@head@path{#1}}}
+
+% finding the hash (sha1) of head
+
+\newcommand\GI@get@head@hash{%
+  \openin\GI@read\GI@repo@prefix/\GI@head@path
+  \begingroup \GI@safe@reading
+  \read\GI@read to\GI@head@hash
+  \GI@export@macro\GI@head@hash
+  \closein\GI@read}
+
+% finding head commit infos
+
+\newcommand\GI@get@head@infos{%
+  \openin\GI@read\GI@repo@prefix/logs/\GI@head@path
+  \begingroup \GI@safe@reading
+  \GI@get@head@infos@loop}
+
+\newcommand\GI@get@head@infos@loop{%
+  \read\GI@read to\GI@log@line
+  %\showtokens\expandafter{\GI@log@line}%
+  \expandafter\GI@infos@from@line\GI@log@line\@nil
+  \ifx\GI@commit\GI@head@hash
+	\expandafter\GI@get@head@infos@end
+  \else
+	\expandafter\GI@get@head@infos@loop
+  \fi}
+
+\@ifdefinable\GI@infos@from@line{%
+  \def\GI@infos@from@line#1 #2 #3 <#4> #5 #6 #7\@nil{%
+	\def\GI@commit{#2}%
+	\def\GI@name{#3}%
+	\def\GI@mail{#4}%
+	\def\GI@timestamp{#5}%
+	\def\GI@timeshift{#6}%
+	\def\GI@what{#7}}}
+
+\newcommand\GI@get@head@infos@end{%
+  \closein\GI@read
+  \edef\@tempa{\endgroup
+	\def\noexpand\GI@commit{\GI@commit}%
+	\def\noexpand\GI@name{\GI@name}%
+	\def\noexpand\GI@mail{\GI@mail}%
+	\def\noexpand\GI@timestamp{\GI@timestamp}%
+	\def\noexpand\GI@timeshift{\GI@timeshift}}%
+  \@tempa}
+
+% main
+
+\GI@check@repo@prefix
+\GI@get@head@path
+\GI@get@head@hash
+\GI@get@head@infos
+
+\makeatother
+
+\newcommand\showval[2]{%
+  \message{^^J#2: -=|#1|=-^^J}}
+
+\makeatletter
+\showval\GI@repo@prefix{Git repo prefix}
+\showval\GI@head@path{Git head path}
+\showval\GI@head@hash{Git head hash}
+\showval\GI@timestamp{Git head timestamp}
+\showval\GI@timeshift{Git head timeshift}
+\makeatletter
+
+\begin{document}
+
+\end{document}
+
+
