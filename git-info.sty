@@ -7,6 +7,7 @@
 \newcommand\gitauthor{GITAUTHOR}
 \newcommand\gitmail{GITMAIL}
 \newcommand\gitcommit{GITCOMMIT}
+\newcommand\gitbranch{GITBRANCH}
 \newcommand\gityear{1970}
 \newcommand\gitmonth{1}
 \newcommand\gitday{1}
@@ -89,6 +90,15 @@
   \edef\@tempa{\endgroup
 	\def\noexpand\GI@set@head@path\scantokens{ref:} }
   \@tempa#1\@nil{\def\GI@head@path{#1}}}
+
+% extracting the branch name from the path to head
+
+\newcommand\GI@get@branch{%
+  \expandafter\GI@set@branch\GI@head@path\@nil}
+
+ \@ifdefinable\GI@set@branch{%
+   \def\GI@set@branch refs/heads/#1\@nil{%
+	 \def\gitbranch{#1}}}
 
 % finding the hash (sha1) of head
 
@@ -218,10 +228,9 @@
 
 % main
 
-\errorcontextlines5
-
 \GI@check@repo@prefix
 \GI@get@head@path
 \GI@get@head@hash
 \GI@get@head@infos
+\GI@get@branch
 
