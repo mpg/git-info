@@ -1,23 +1,43 @@
 \documentclass{minimal}
-\usepackage[ascii]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{ted}
+\usepackage{ted, trace}
 
 \makeatletter
 
-% initiliasations
+% initialisations
 
-\newcommand\GI@max@depth{5 }
+% public values
+\newcommand\gitauthor{GITAUTHOR}
+\newcommand\gitmail{GITMAIL}
+\newcommand\gitcommit{GITCOMMIT}
+\newcommand\gityear{1970}
+\newcommand\gitmonth{1}
+\newcommand\gitday{1}
+\newcommand\githour{0}
+\newcommand\gitminute{0}
+\newcommand\gitsecond{0}
+\newcommand\gittssign{+}
+\newcommand\gittshour{0}
+\newcommand\gittsmin{0}
+
+% semi-private setting
+\newcommand\GI@max@depth{8}
+
+% private constants
 \newcommand\GI@repo@prefix{.git}
 \newcommand\GI@head@file{\GI@repo@prefix/HEAD}
 \@ifdefinable\GI@read{\let\GI@read\@inputcheck}
 
-% utils
+% \TeX{}nical tools
 
 \newcommand\GI@export@macro[1]{%
   \edef\@tempa{\endgroup
 	\def\noexpand#1{#1}}%
   \@tempa}
+
+\newcommand\GI@set@export[2]{%
+  \def\noexpand#1{\unexpanded\expandafter{#2}}}%
 
 \newcommand\GI@safe@reading{%
   \let\do\@makeother \dospecials
@@ -26,7 +46,7 @@
   \endlinechar\m@ne
   \everyeof{\noexpand}}
 
-% finding the .git dir
+% finding the .git directory
 
 \newcommand\GI@check@repo@prefix{%
   \IfFileExists{./\GI@head@file}{%
@@ -35,7 +55,7 @@
 	\GI@set@repo@prefix}}
 
 \newcommand\GI@set@repo@prefix{%
-  \begingroup \count@\GI@max@depth
+  \begingroup \count@\GI@max@depth\relax
   \GI@set@repo@prefix@}
 
 \newcommand\GI@set@repo@prefix@{%
@@ -92,7 +112,6 @@
 
 \newcommand\GI@get@head@infos@loop{%
   \read\GI@read to\GI@log@line
-  %\showtokens\expandafter{\GI@log@line}%
   \expandafter\GI@infos@from@line\GI@log@line\@nil
   \ifx\GI@commit\GI@head@hash
 	\expandafter\GI@get@head@infos@end
@@ -111,15 +130,99 @@
 
 \newcommand\GI@get@head@infos@end{%
   \closein\GI@read
+  \GI@set@datetime
   \edef\@tempa{\endgroup
-	\def\noexpand\GI@commit{\GI@commit}%
-	\def\noexpand\GI@name{\GI@name}%
-	\def\noexpand\GI@mail{\GI@mail}%
-	\def\noexpand\GI@timestamp{\GI@timestamp}%
-	\def\noexpand\GI@timeshift{\GI@timeshift}}%
+	\GI@set@export\gitcommit{\GI@commit}%
+	\GI@set@export\gitauthor{\GI@name}%
+	\GI@set@export\gitmail{\GI@mail}%
+	\GI@set@export\gityear{\GI@year}%
+	\GI@set@export\gitmonth{\the\GI@month}%
+	\GI@set@export\gitday{\GI@day}%
+	\GI@set@export\githour{\GI@hour}%
+	\GI@set@export\gitminute{\GI@min}%
+	\GI@set@export\gitsecond{\GI@sec}%
+	\GI@set@export\gittssign{\GI@tssign}%
+	\GI@set@export\gittshour{\GI@tshour}%
+	\GI@set@export\gittsminute{\GI@tsmin}}%
   \@tempa}
 
+% time conversions
+
+% a = quotient(a, b) * b + remainder(a, b)
+% with 0 <= remainder(a, b) < abs(b)
+% assumes a >= 0 and b > 0
+\newcommand\GI@int@quotient[2]{%
+  \ifnum\numexpr#1=\z@ \z@ \else \numexpr(#1-((#2-1)/2))/#2\relax \fi}
+\newcommand\GI@int@remainder[2]{%
+  \numexpr#1-\GI@int@quotient{#1}{#2}*#2\relax}
+
+% #1 = cs to define, #2 = modulo; sets \count@ too
+\newcommand\GI@extract@units[2]{%
+  \edef#1{\number\GI@int@remainder{\count@}{#2}}%
+  \divide\count@#2\relax}
+
+% #1 = nb of year since epoch, result = nb of days since epoch
+% Ex: 0 => 0, 365, 730, 1096, 1461, ...
+\newcommand\GI@years@to@days[1]{%
+  \numexpr365*(#1)+\GI@int@quotient{#1+1}{4}\relax}
+
+% \count@ = days since ephoch (before), day of year after
+\newcommand\GI@extract@year{%
+  \edef\GI@year{\number\numexpr\GI@int@quotient{\count@}{365}%
+	+\ifnum\count@<\GI@years@to@days{%
+	  \GI@int@quotient{\count@}{365}}1969 \else1970 \fi}%
+  \advance\count@-\number\GI@years@to@days{\GI@year-1970}\relax}
+
+% sets month and day of month
+\newcommand\GI@extract@month@day{%
+  \ifnum\GI@int@remainder{\GI@year}{4}=\z@
+	\ifnum\count@>58
+	  \ifnum\count@=59 \def\GI@hook{\def\GI@day{29}} \fi
+	  \advance\count@\m@ne
+	\fi
+  \fi
+  \countdef\GI@month\tw@ \GI@month\@ne
+  \@for\GI@month@length:=31,28,31,30,31,30,31,31,30,31,30,31\do{%
+	\GI@extract@month@day@loop}%
+  \csname GI@hook\endcsname}
+
+\newcommand\GI@extract@month@day@loop{%
+  \ifnum\count@<\GI@month@length\relax
+	\edef\GI@day{\number\numexpr1+\count@}%
+	\let\GI@extract@month@day@loop\relax
+  \else
+	\advance\GI@month\@ne
+	\advance\count@-\GI@month@length
+  \fi}
+
+\newcommand\GI@set@datetime{%
+  \expandafter\GI@parse@timeshift\GI@timeshift
+  \count@\numexpr\GI@timestamp
+	\GI@tssign((\GI@tshour*60+\GI@tsmin)*60)\relax
+  \GI@extract@units\GI@sec{60}%
+  \GI@extract@units\GI@min{60}%
+  \GI@extract@units\GI@hour{24}%
+  \GI@extract@year
+  \GI@extract@month@day}
+
+\newcommand\GI@parse@timeshift[5]{%
+  \def\GI@tssign{#1}%
+  \def\GI@tshour{#2#3}%
+  \def\GI@tsmin{#4#5}}
+
+% time display
+
+\newcommand\GI@pad[1]{%
+  \ifnum#1<10 0#1\else#1\fi}
+
+\newcommand\gitisodate{%
+  \gityear-\GI@pad{\gitmonth}-\GI@pad{\gitday}%
+  T\GI@pad{\githour}:\GI@pad{\gitminute}:\GI@pad{\gitsecond}%
+  \gittssign\gittshour:\gittsminute}
+
 % main
+
+\errorcontextlines5
 
 \GI@check@repo@prefix
 \GI@get@head@path
@@ -128,6 +231,42 @@
 
 \makeatother
 
+% tests
+
+\makeatletter
+\newcommand\testdate[3][+0000]{%
+  \begingroup
+  \def\GI@timestamp{#2}%
+  \def\GI@timeshift{#1}%
+  \GI@set@datetime
+  \edef\@tempa{%
+    \GI@set@export\gityear{\GI@year}%
+    \GI@set@export\gitmonth{\the\GI@month}%
+    \GI@set@export\gitday{\GI@day}%
+    \GI@set@export\githour{\GI@hour}%
+    \GI@set@export\gitminute{\GI@min}%
+    \GI@set@export\gitsecond{\GI@sec}%
+    \GI@set@export\gittssign{\GI@tssign}%
+    \GI@set@export\gittshour{\GI@tshour}%
+    \GI@set@export\gittsminute{\GI@tsmin}%
+    }\@tempa
+  \message{^^J#2#1:^^JMacro: \gitisodate}%
+  \message{^^JReal: \space#3}%
+  \endgroup}
+\makeatother
+
+\testdate{0}{1970-01-01T00:00:00+00:00}
+\testdate{2865906}{1970-02-03T04:05:06+00:00}
+\testdate{31535999}{1970-12-31T23:59:59+00:00}
+\testdate{31536000}{1971-01-01T00:00:00+00:00}
+\testdate{951955200}{2000-03-02T00:00:00+00:00}
+\testdate{951868799}{2000-02-29T23:59:59+00:00}
+\testdate{951868800}{2000-03-01T00:00:00+00:00}
+\testdate{978307199}{2000-12-31T23:59:59+00:00}
+\testdate{978307200}{2001-01-01T00:00:00+00:00}
+\testdate{983404799}{2001-02-28T23:59:59+00:00}
+\testdate{983404800}{2001-03-01T00:00:00+00:00}
+
 \newcommand\showval[2]{%
   \message{^^J#2: -=|#1|=-^^J}}
 
@@ -135,8 +274,10 @@
 \showval\GI@repo@prefix{Git repo prefix}
 \showval\GI@head@path{Git head path}
 \showval\GI@head@hash{Git head hash}
-\showval\GI@timestamp{Git head timestamp}
-\showval\GI@timeshift{Git head timeshift}
+\showval\gitisodate{Git date (iso)}
+\showval\gitcommit{Git commit}
+\showval\gitauthor{Git author}
+\showval\gitmail{Git mail}
 \makeatletter
 
 \begin{document}
