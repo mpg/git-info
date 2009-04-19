@@ -164,7 +164,7 @@
 \newcommand\GI@years@to@days[1]{%
   \numexpr365*(#1)+\GI@int@quotient{#1+1}{4}\relax}
 
-% \count@ = days since ephoch (before), day of year after
+% \count@ = days since epoch (before), day of year (after)
 \newcommand\GI@extract@year{%
   \edef\GI@year{\number\numexpr\GI@int@quotient{\count@}{365}%
 	+\ifnum\count@<\GI@years@to@days{%
@@ -225,7 +225,7 @@
 \newcommand\GI@pad[1]{%
   \ifnum#1<10 0#1\else#1\fi}
 
-\newcommand\gitisodate{%
+\newcommand\githeadisodate{%
   \githeadyear-\GI@pad{\githeadmonth}-\GI@pad{\githeadday}%
   T\GI@pad{\githeadhour}:\GI@pad{\githeadminute}:\GI@pad{\githeadsecond}%
   \githeadtzsign\githeadtzhour:\githeadtzminute}

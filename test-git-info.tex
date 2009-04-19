@@ -8,9 +8,9 @@
 \newcommand\testdate[3][+0000]{%
   \begingroup
   \def\GI@timestamp{#2}%
-  \def\GI@timeshift{#1}%
+  \def\GI@timezone{#1}%
   \GI@get@datetime
-  \message{^^J#2#1:^^JMacro: \gitisodate}%
+  \message{^^J#2#1:^^JMacro: \githeadisodate}%
   \message{^^JReal: \space#3}%
   \endgroup}
 \makeatother
@@ -30,11 +30,11 @@
 \newcommand\showval[2]{%
   \message{^^J#2: -=|#1|=-^^J}}
 
-\showval\gitcommit{Git commit}
-\showval\gitisodate{Git date (iso)}
-\showval\gitbranch{Git branch}
-\showval\gitauthor{Git author}
-\showval\gitmail{Git mail}
+\showval\githeadcommit{Git commit}
+\showval\githeadisodate{Git date (iso)}
+\showval\githeadbranch{Git branch}
+\showval\githeadauthor{Git author}
+\showval\githeadmail{Git mail}
 
 \begin{document}
 
