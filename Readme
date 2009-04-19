@@ -1,0 +1,34 @@
+                                   git-infos
+
+                   Using git informations in LaTeX documents
+                            Manuel Pégourié-Gonnard
+                                 mpg@elzevir.fr
+
+
+This an early version of the git-info LaTeX package, not yet suitable for
+distribution on the CTAN, but maybe still usable.  Currently, there is only one
+feature and no documentation besides this readme.
+
+The feature is, if you load git-info in a document lying in a git repository,
+the package defines a few macros containing information about the current HEAD:
+- hash, committer and date of the last commit,
+- current branch.
+See the test file for the full list of macros available.
+
+Git-info works by parsing some plain-text files in the git repository in pure
+TeX.  There is currently some restrictions : the current HEAD must be a branch,
+not detached; and probably other restrictions I am not aware of, due to my poor
+knowledge of git (internals).
+
+Plans for the future are to allow access to the same information (except the
+branch) individually for each file, à la svn-multi.  With current TeX, it can
+probably not be done in TeX macros, since access to a few compressed files is
+needed.  So a helper script will be provided, intended to be run by the
+post-commit hook, writing the necessary information to a plain text file.
+
+Other plans for the future also include more testing, some customisation options,
+and a proper documentation, of course.
+
+Feel free to test the package, report features and suggest new bugs ;-)
+
+Happy TeXing!
