@@ -1,0 +1,23 @@
+Error handling
+--------------
+
+Be nicer if not in a git repo?
+
+Check for unexpected EOF?
+
+Git logic
+---------
+
+What to do it HEAD is not a branch?
+
+General
+-------
+
+Use .gih file.
+
+Provide user macros for multiple files.
+
+Find the most recently commited file à la svn-multi.
+
+Write doc: user, hook, code...
+

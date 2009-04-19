@@ -20,10 +20,12 @@
 
 % semi-private setting
 \newcommand\GI@max@depth{8}
+\newcommand\GI@gih@name{git-info.gih}
 
 % private constants
-\newcommand\GI@repo@prefix{.git}
-\newcommand\GI@head@file{\GI@repo@prefix/HEAD}
+\newcommand\GI@repo@prefix{}
+\newcommand\GI@head@file{\GI@repo@prefix/.git/HEAD}
+\newcommand\GI@gih@file{\GI@repo@prefix/\GI@gih@name}
 \@ifdefinable\GI@read{\let\GI@read\@inputcheck}
 
 % \TeX{}nical tools
@@ -50,7 +52,7 @@
 
 \newcommand\GI@check@repo@prefix{%
   \IfFileExists{./\GI@head@file}{%
-	\edef\GI@repo@prefix{./\GI@repo@prefix}%
+	\edef\GI@repo@prefix{./}%
 	}{%
 	\GI@set@repo@prefix}}
 
@@ -106,7 +108,7 @@
 % finding the hash (sha1) of head
 
 \newcommand\GI@get@head@hash{%
-  \openin\GI@read\GI@repo@prefix/\GI@head@path
+  \openin\GI@read\GI@repo@prefix/.git/\GI@head@path
   \begingroup \GI@safe@reading
   \read\GI@read to\GI@head@hash
   \GI@export@macro\GI@head@hash
@@ -115,7 +117,7 @@
 % finding head commit infos
 
 \newcommand\GI@get@head@infos{%
-  \openin\GI@read\GI@repo@prefix/logs/\GI@head@path
+  \openin\GI@read\GI@repo@prefix/.git/logs/\GI@head@path
   \begingroup \GI@safe@reading
   \GI@get@head@infos@loop}
 
