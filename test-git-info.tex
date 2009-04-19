@@ -7,9 +7,9 @@
 \makeatletter
 \newcommand\testdate[3][+0000]{%
   \begingroup
-  \def\GI@timestamp{#2}%
-  \def\GI@timezone{#1}%
-  \GI@get@datetime
+  \def\GI@head@timestamp{#2}%
+  \def\GI@head@timezone{#1}%
+  \GI@get@gen@datetime{head}%
   \message{^^J#2#1:^^JMacro: \githeadisodate}%
   \message{^^JReal: \space#3}%
   \endgroup}
