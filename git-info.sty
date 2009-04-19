@@ -15,12 +15,15 @@
 \newcommand\githeadminute{0}
 \newcommand\githeadsecond{0}
 \newcommand\githeadtzsign{+}
-\newcommand\githeadtzhour{0}
-\newcommand\githeadtzminute{0}
+\newcommand\githeadtzhour{00}
+\newcommand\githeadtzminute{00}
 
-% semi-private setting
+% semi-private settings
 \newcommand\GI@max@depth{8}
 \newcommand\GI@gih@name{git-info.gih}
+
+% private values
+\newif\ifGI@is@a@repo@
 
 % private constants
 \newcommand\GI@repo@prefix{}
@@ -51,6 +54,7 @@
 % finding the .git directory
 
 \newcommand\GI@check@repo@prefix{%
+  \GI@is@a@repo@true
   \IfFileExists{./\GI@head@file}{%
 	\edef\GI@repo@prefix{./}%
 	}{%
@@ -74,10 +78,37 @@
 
 \newcommand\GI@not@a@git@repo{%
   \endgroup
-  \PackageError{git-info}{%
-	Current directory is not a git repository}{%
-	Check the manual for details.}%
+  \PackageWarning{git-info}{%
+	Current directory is not a git repository.\MessageBreak
+	No information about current HEAD is available.\MessageBreak
+	\protect\githead* commands are set to dummy values\@gobble}
+  \GI@is@a@repo@false
   \endinput}
+
+% getting all informations about HEAD
+
+\newcommand\GI@get@head@all{%
+  \begingroup
+  \GI@get@head@path
+  \GI@get@branch
+  \GI@get@head@hash
+  \GI@get@head@infos
+  \GI@get@gen@datetime{head}%
+  \edef\@tempa{\endgroup
+	\GI@set@export\githeadauthor{\githeadauthor}%
+	\GI@set@export\githeadmail{\githeadmail}%
+	\GI@set@export\githeadcommit{\githeadcommit}%
+	\GI@set@export\githeadbranch{\githeadbranch}%
+	\GI@set@export\githeadyear{\githeadyear}%
+	\GI@set@export\githeadmonth{\githeadmonth}%
+	\GI@set@export\githeadday{\githeadday}%
+	\GI@set@export\githeadhour{\githeadhour}%
+	\GI@set@export\githeadminute{\githeadminute}%
+	\GI@set@export\githeadsecond{\githeadsecond}%
+	\GI@set@export\githeadtzsign{\githeadtzsign}%
+	\GI@set@export\githeadtzhour{\githeadtzhour}%
+	\GI@set@export\githeadtzminute{\githeadtzminute}}%
+  \@tempa}
 
 % finding the path to head
 
@@ -247,28 +278,8 @@
 
 % main
 
-\newcommand\gitgetinfos{%
-  \begingroup
-  \GI@check@repo@prefix
-  \GI@get@head@path
-  \GI@get@branch
-  \GI@get@head@hash
-  \GI@get@head@infos
-  \GI@get@gen@datetime{head}%
-  \edef\@tempa{\endgroup
-	\GI@set@export\githeadauthor{\githeadauthor}%
-	\GI@set@export\githeadmail{\githeadmail}%
-	\GI@set@export\githeadcommit{\githeadcommit}%
-	\GI@set@export\githeadbranch{\githeadbranch}%
-	\GI@set@export\githeadyear{\githeadyear}%
-	\GI@set@export\githeadmonth{\githeadmonth}%
-	\GI@set@export\githeadday{\githeadday}%
-	\GI@set@export\githeadhour{\githeadhour}%
-	\GI@set@export\githeadminute{\githeadminute}%
-	\GI@set@export\githeadsecond{\githeadsecond}%
-	\GI@set@export\githeadtzsign{\githeadtzsign}%
-	\GI@set@export\githeadtzhour{\githeadtzhour}%
-	\GI@set@export\githeadtzminute{\githeadtzminute}}%
-  \@tempa}
+\GI@check@repo@prefix
+\ifGI@is@a@repo@
+  \GI@get@head@all
+\fi
 
-\gitgetinfos

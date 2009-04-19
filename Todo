@@ -1,14 +1,12 @@
 Error handling
 --------------
 
-Be nicer if not in a git repo?
-
 Check for unexpected EOF?
 
 Git logic
 ---------
 
-What to do it HEAD is not a branch?
+What to do if HEAD is not a branch?
 
 General
 -------
