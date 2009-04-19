@@ -4,19 +4,19 @@
 % initialisations
 
 % public values
-\newcommand\gitauthor{GITAUTHOR}
-\newcommand\gitmail{GITMAIL}
-\newcommand\gitcommit{GITCOMMIT}
-\newcommand\gitbranch{GITBRANCH}
-\newcommand\gityear{1970}
-\newcommand\gitmonth{1}
-\newcommand\gitday{1}
-\newcommand\githour{0}
-\newcommand\gitminute{0}
-\newcommand\gitsecond{0}
-\newcommand\gittssign{+}
-\newcommand\gittshour{0}
-\newcommand\gittsminute{0}
+\newcommand\githeadauthor{GITHEADAUTHOR}
+\newcommand\githeadmail{GITHEADMAIL}
+\newcommand\githeadcommit{GITHEADCOMMIT}
+\newcommand\githeadbranch{GITHEADBRANCH}
+\newcommand\githeadyear{1970}
+\newcommand\githeadmonth{1}
+\newcommand\githeadday{1}
+\newcommand\githeadhour{0}
+\newcommand\githeadminute{0}
+\newcommand\githeadsecond{0}
+\newcommand\githeadtzsign{+}
+\newcommand\githeadtzhour{0}
+\newcommand\githeadtzminute{0}
 
 % semi-private setting
 \newcommand\GI@max@depth{8}
@@ -98,7 +98,7 @@
 
  \@ifdefinable\GI@set@branch{%
    \def\GI@set@branch refs/heads/#1\@nil{%
-	 \def\gitbranch{#1}}}
+	 \def\githeadbranch{#1}}}
 
 % finding the hash (sha1) of head
 
@@ -131,17 +131,17 @@
 	\def\GI@name{#3}%
 	\def\GI@mail{#4}%
 	\def\GI@timestamp{#5}%
-	\def\GI@timeshift{#6}%
+	\def\GI@timezone{#6}%
 	\def\GI@what{#7}}}
 
 \newcommand\GI@get@head@infos@end{%
   \closein\GI@read
   \edef\@tempa{\endgroup
 	\GI@set@export\GI@timestamp{\GI@timestamp}%
-	\GI@set@export\GI@timeshift{\GI@timeshift}%
-	\GI@set@export\gitcommit{\GI@commit}%
-	\GI@set@export\gitauthor{\GI@name}%
-	\GI@set@export\gitmail{\GI@mail}}%
+	\GI@set@export\GI@timezone{\GI@timezone}%
+	\GI@set@export\githeadcommit{\GI@commit}%
+	\GI@set@export\githeadauthor{\GI@name}%
+	\GI@set@export\githeadmail{\GI@mail}}%
   \@tempa}
 
 % time conversions
@@ -195,30 +195,30 @@
 
 \newcommand\GI@get@datetime{%
   \begingroup
-  \expandafter\GI@parse@timeshift\GI@timeshift
+  \expandafter\GI@parse@timezone\GI@timezone
   \count@\numexpr\GI@timestamp
-	\GI@tssign((\GI@tshour*60+\GI@tsmin)*60)\relax
+	\GI@tzsign((\GI@tzhour*60+\GI@tzmin)*60)\relax
   \GI@extract@units\GI@sec{60}%
   \GI@extract@units\GI@min{60}%
   \GI@extract@units\GI@hour{24}%
   \GI@extract@year
   \GI@extract@month@day
   \edef\@tempa{\endgroup
-	\GI@set@export\gityear{\GI@year}%
-	\GI@set@export\gitmonth{\the\GI@month}%
-	\GI@set@export\gitday{\GI@day}%
-	\GI@set@export\githour{\GI@hour}%
-	\GI@set@export\gitminute{\GI@min}%
-	\GI@set@export\gitsecond{\GI@sec}%
-	\GI@set@export\gittssign{\GI@tssign}%
-	\GI@set@export\gittshour{\GI@tshour}%
-	\GI@set@export\gittsminute{\GI@tsmin}}%
+	\GI@set@export\githeadyear{\GI@year}%
+	\GI@set@export\githeadmonth{\the\GI@month}%
+	\GI@set@export\githeadday{\GI@day}%
+	\GI@set@export\githeadhour{\GI@hour}%
+	\GI@set@export\githeadminute{\GI@min}%
+	\GI@set@export\githeadsecond{\GI@sec}%
+	\GI@set@export\githeadtzsign{\GI@tzsign}%
+	\GI@set@export\githeadtzhour{\GI@tzhour}%
+	\GI@set@export\githeadtzminute{\GI@tzmin}}%
   \@tempa}
 
-\newcommand\GI@parse@timeshift[5]{%
-  \def\GI@tssign{#1}%
-  \def\GI@tshour{#2#3}%
-  \def\GI@tsmin{#4#5}}
+\newcommand\GI@parse@timezone[5]{%
+  \def\GI@tzsign{#1}%
+  \def\GI@tzhour{#2#3}%
+  \def\GI@tzmin{#4#5}}
 
 % time display
 
@@ -226,9 +226,9 @@
   \ifnum#1<10 0#1\else#1\fi}
 
 \newcommand\gitisodate{%
-  \gityear-\GI@pad{\gitmonth}-\GI@pad{\gitday}%
-  T\GI@pad{\githour}:\GI@pad{\gitminute}:\GI@pad{\gitsecond}%
-  \gittssign\gittshour:\gittsminute}
+  \githeadyear-\GI@pad{\githeadmonth}-\GI@pad{\githeadday}%
+  T\GI@pad{\githeadhour}:\GI@pad{\githeadminute}:\GI@pad{\githeadsecond}%
+  \githeadtzsign\githeadtzhour:\githeadtzminute}
 
 % main
 
@@ -241,19 +241,19 @@
   \GI@get@branch
   \GI@get@datetime
   \edef\@tempa{\endgroup
-	\GI@set@export\gitauthor{\gitauthor}%
-	\GI@set@export\gitmail{\gitmail}%
-	\GI@set@export\gitcommit{\gitcommit}%
-	\GI@set@export\gitbranch{\gitbranch}%
-	\GI@set@export\gityear{\gityear}%
-	\GI@set@export\gitmonth{\gitmonth}%
-	\GI@set@export\gitday{\gitday}%
-	\GI@set@export\githour{\githour}%
-	\GI@set@export\gitminute{\gitminute}%
-	\GI@set@export\gitsecond{\gitsecond}%
-	\GI@set@export\gittssign{\gittssign}%
-	\GI@set@export\gittshour{\gittshour}%
-	\GI@set@export\gittsminute{\gittsminute}}%
+	\GI@set@export\githeadauthor{\githeadauthor}%
+	\GI@set@export\githeadmail{\githeadmail}%
+	\GI@set@export\githeadcommit{\githeadcommit}%
+	\GI@set@export\githeadbranch{\githeadbranch}%
+	\GI@set@export\githeadyear{\githeadyear}%
+	\GI@set@export\githeadmonth{\githeadmonth}%
+	\GI@set@export\githeadday{\githeadday}%
+	\GI@set@export\githeadhour{\githeadhour}%
+	\GI@set@export\githeadminute{\githeadminute}%
+	\GI@set@export\githeadsecond{\githeadsecond}%
+	\GI@set@export\githeadtzsign{\githeadtzsign}%
+	\GI@set@export\githeadtzhour{\githeadtzhour}%
+	\GI@set@export\githeadtzminute{\githeadtzminute}}%
   \@tempa}
 
 \gitgetinfos
