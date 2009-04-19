@@ -1,6 +1,7 @@
 \documentclass{minimal}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[english]{babel}
 \usepackage{ted, trace}
 \usepackage{git-info}
 
@@ -31,11 +32,27 @@
   \message{^^J#2: -=|#1|=-^^J}}
 
 \showval\githeadcommit{Git commit}
-\showval\githeaddatetime{Git datetime}
 \showval\githeadbranch{Git branch}
 \showval\githeadauthor{Git author}
 \showval\githeadmail{Git mail}
+\showval\githeaddatetime{Git head datetime}
+
+% \showval\githeaddate{Git head date}
+% \showval\githeadtime{Git head time}
+% \showval\githeadtimezone{Git head timezone}
+% \showval\githeadyear{Git head year}
+% \showval\githeadmonth{Git head month}
+% \showval\githeadday{Git head day}
+% \showval\githeadhour{Git head hour}
+% \showval\githeadmin{Git head min}
+% \showval\githeadsec{Git head sec}
+% \showval\githeadtzsign{Git head tzsing}
+% \showval\githeadtzhour{Git head tzhour}
+% \showval\githeadtzmin{Git head tzmin}
 
 \begin{document}
+
+% Not expandable, so must be tested in typesetting context only.
+Githeadtoday: -=|\githeadtoday|=-\par
 
 \end{document}

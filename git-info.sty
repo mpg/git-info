@@ -8,15 +8,7 @@
 \newcommand\githeadmail{GITHEADMAIL}
 \newcommand\githeadcommit{GITHEADCOMMIT}
 \newcommand\githeadbranch{GITHEADBRANCH}
-\newcommand\githeadyear{1970}
-\newcommand\githeadmonth{1}
-\newcommand\githeadday{1}
-\newcommand\githeadhour{0}
-\newcommand\githeadminute{0}
-\newcommand\githeadsecond{0}
-\newcommand\githeadtzsign{+}
-\newcommand\githeadtzhour{0}
-\newcommand\githeadtzminute{0}
+\newcommand\GI@head@datetime{{1970}{01}{01}{00}{00}{00}{+}{00}{00}}
 
 % semi-private settings
 \newcommand\GI@max@depth{8}
@@ -99,7 +91,7 @@
 	\GI@set@export\githeadbranch{\githeadbranch}%
 	\GI@set@export\githeadauthor{\githeadauthor}%
 	\GI@set@export\githeadmail{\githeadmail}%
-	\GI@set@export\githeaddatetime{\githeaddatetime}}%
+	\GI@set@export\GI@head@datetime{\GI@head@datetime}}%
   \@tempa}
 
 % finding the path to head
@@ -233,11 +225,11 @@
   \GI@extract@year
   \GI@extract@month@day
   \edef\GI@datetime{%
-	\GI@year-\GI@two@d{\the\GI@month}-\GI@two@d\GI@day 
-	T\GI@two@d\GI@hour:\GI@two@d\GI@min:\GI@two@d\GI@sec
-	\GI@tzsign\GI@two@d\GI@tzhour\GI@two@d\GI@tzmin}%
+	{\GI@year}{\GI@two@d{\the\GI@month}}{\GI@two@d\GI@day}%
+	{\GI@two@d\GI@hour}{\GI@two@d\GI@min}{\GI@two@d\GI@sec}%
+	{\GI@tzsign}{\GI@two@d\GI@tzhour}{\GI@two@d\GI@tzmin}}%
   \edef\@tempa{\endgroup
-	\GI@set@export@name{git#1datetime}{\GI@datetime}}
+	\GI@set@export@name{GI@#1@datetime}{\GI@datetime}}
   \@tempa}
 
 \newcommand\GI@parse@timezone[5]{%
@@ -247,6 +239,66 @@
 
 \newcommand\GI@two@d[1]{%
   \ifnum#1<10 0\number#1\else \number#1\fi}
+
+% displaying date - internal macros
+
+\newcommand\GI@dt@date	  [9] {#1-#2-#3}
+\newcommand\GI@dt@time    [9] {#4:#5:#6}
+\newcommand\GI@dt@timezone[9] {#7#8:#9}
+\newcommand\GI@dt@datetime[9] {#1-#2-#3T#4:#5:#6#7#8:#9}
+
+\newcommand\GI@dt@year  [9] {#1}
+\newcommand\GI@dt@month [9] {#2}
+\newcommand\GI@dt@day   [9] {#3}
+\newcommand\GI@dt@hour  [9] {#4}
+\newcommand\GI@dt@min   [9] {#5}
+\newcommand\GI@dt@sec   [9] {#6}
+\newcommand\GI@dt@tzsign[9] {#7}
+\newcommand\GI@dt@tzhour[9] {#8}
+\newcommand\GI@dt@tzmin [9] {#9}
+
+\newcommand\GI@dt@today[9]{%
+  \@ifundefined{today}{%
+	\PackageError{git-info}{%
+	  \noexpand\today undefined! Did you load babel?}{%
+	  You cannot use \noexpand\gitXXXtoday macros if
+	  \noexpand\today is undefined.\MessageBreak
+	  This macro is usually defined by the babel package.}%
+	}{%
+	\begingroup
+	\year#1 \month#2 \day#3
+	\today
+	\endgroup}}
+
+% displaying date - defining user macros
+
+\newcommand\GI@def@dt@macro[2]{%
+  \begingroup
+  \edef\@tempa{\endgroup
+	\noexpand\newcommand
+	\expandafter\noexpand\csname git#1#2\endcsname{%
+	  \noexpand\expandafter
+	  \expandafter\noexpand\csname GI@dt@#2\endcsname
+	  \expandafter\noexpand\csname GI@#1@datetime\endcsname}}%
+  \@tempa}
+
+\newcommand\GI@def@dt@collection[1]{%
+  \GI@def@dt@macro{#1}{today}%
+  \GI@def@dt@macro{#1}{datetime}%
+  \GI@def@dt@macro{#1}{date}%
+  \GI@def@dt@macro{#1}{time}%
+  \GI@def@dt@macro{#1}{timezone}%
+  \GI@def@dt@macro{#1}{year}%
+  \GI@def@dt@macro{#1}{month}%
+  \GI@def@dt@macro{#1}{day}%
+  \GI@def@dt@macro{#1}{hour}%
+  \GI@def@dt@macro{#1}{min}%
+  \GI@def@dt@macro{#1}{sec}%
+  \GI@def@dt@macro{#1}{tzsign}%
+  \GI@def@dt@macro{#1}{tzhour}%
+  \GI@def@dt@macro{#1}{tzmin}}
+
+\GI@def@dt@collection{head}
 
 % main
 
