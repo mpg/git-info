@@ -273,12 +273,19 @@
 % displaying date - defining user macros
 
 \newcommand\GI@def@dt@macro[2]{%
-  \begingroup
-  \edef\@tempa{\endgroup
+  \begingroup \edef\@tempa{\endgroup
 	\noexpand\newcommand
 	\expandafter\noexpand\csname git#1#2\endcsname{%
 	  \noexpand\expandafter
 	  \expandafter\noexpand\csname GI@dt@#2\endcsname
+	  \expandafter\noexpand\csname GI@#1@datetime\endcsname}}%
+  \@tempa}
+
+\newcommand\GI@def@dt@gen[1]{%
+  \begingroup \edef\@tempa{\endgroup
+	\noexpand\newcommand
+	\expandafter\noexpand\csname git#1dtformat\endcsname[1]{%
+	  \unexpanded{\expandafter##1}%
 	  \expandafter\noexpand\csname GI@#1@datetime\endcsname}}%
   \@tempa}
 
@@ -296,7 +303,8 @@
   \GI@def@dt@macro{#1}{sec}%
   \GI@def@dt@macro{#1}{tzsign}%
   \GI@def@dt@macro{#1}{tzhour}%
-  \GI@def@dt@macro{#1}{tzmin}}
+  \GI@def@dt@macro{#1}{tzmin}%
+  \GI@def@dt@gen{#1}}
 
 \GI@def@dt@collection{head}
 
