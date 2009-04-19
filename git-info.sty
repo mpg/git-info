@@ -15,8 +15,8 @@
 \newcommand\githeadminute{0}
 \newcommand\githeadsecond{0}
 \newcommand\githeadtzsign{+}
-\newcommand\githeadtzhour{00}
-\newcommand\githeadtzminute{00}
+\newcommand\githeadtzhour{0}
+\newcommand\githeadtzminute{0}
 
 % semi-private settings
 \newcommand\GI@max@depth{8}
@@ -95,19 +95,11 @@
   \GI@get@head@infos
   \GI@get@gen@datetime{head}%
   \edef\@tempa{\endgroup
-	\GI@set@export\githeadauthor{\githeadauthor}%
-	\GI@set@export\githeadmail{\githeadmail}%
 	\GI@set@export\githeadcommit{\githeadcommit}%
 	\GI@set@export\githeadbranch{\githeadbranch}%
-	\GI@set@export\githeadyear{\githeadyear}%
-	\GI@set@export\githeadmonth{\githeadmonth}%
-	\GI@set@export\githeadday{\githeadday}%
-	\GI@set@export\githeadhour{\githeadhour}%
-	\GI@set@export\githeadminute{\githeadminute}%
-	\GI@set@export\githeadsecond{\githeadsecond}%
-	\GI@set@export\githeadtzsign{\githeadtzsign}%
-	\GI@set@export\githeadtzhour{\githeadtzhour}%
-	\GI@set@export\githeadtzminute{\githeadtzminute}}%
+	\GI@set@export\githeadauthor{\githeadauthor}%
+	\GI@set@export\githeadmail{\githeadmail}%
+	\GI@set@export\githeaddatetime{\githeaddatetime}}%
   \@tempa}
 
 % finding the path to head
@@ -240,16 +232,12 @@
   \GI@extract@units\GI@hour{24}%
   \GI@extract@year
   \GI@extract@month@day
+  \edef\GI@datetime{%
+	\GI@year-\GI@two@d{\the\GI@month}-\GI@two@d\GI@day 
+	T\GI@two@d\GI@hour:\GI@two@d\GI@min:\GI@two@d\GI@sec
+	\GI@tzsign\GI@two@d\GI@tzhour\GI@two@d\GI@tzmin}%
   \edef\@tempa{\endgroup
-	\GI@set@export@name{git#1year}{\GI@year}%
-	\GI@set@export@name{git#1month}{\the\GI@month}%
-	\GI@set@export@name{git#1day}{\GI@day}%
-	\GI@set@export@name{git#1hour}{\GI@hour}%
-	\GI@set@export@name{git#1minute}{\GI@min}%
-	\GI@set@export@name{git#1second}{\GI@sec}%
-	\GI@set@export@name{git#1tzsign}{\GI@tzsign}%
-	\GI@set@export@name{git#1tzhour}{\GI@tzhour}%
-	\GI@set@export@name{git#1tzminute}{\GI@tzmin}}%
+	\GI@set@export@name{git#1datetime}{\GI@datetime}}
   \@tempa}
 
 \newcommand\GI@parse@timezone[5]{%
@@ -257,24 +245,8 @@
   \def\GI@tzhour{#2#3}%
   \def\GI@tzmin{#4#5}}
 
-% time display
-
-\newcommand\GI@pad[1]{%
-  \ifnum#1<10 0#1\else#1\fi}
-
-\newcommand\githeadisodate{%
-  \git@gen@isodate{head}}
-
-\newcommand\git@gen@isodate[1]{%
-  \csname git#1year\endcsname-%
-  \GI@pad{\csname git#1month\endcsname}-%
-  \GI@pad{\csname git#1day\endcsname}T%
-  \GI@pad{\csname git#1hour\endcsname}:%
-  \GI@pad{\csname git#1minute\endcsname}:%
-  \GI@pad{\csname git#1second\endcsname}%
-  \csname git#1tzsign\endcsname
-  \csname git#1tzhour\endcsname:%
-  \csname git#1tzminute\endcsname}
+\newcommand\GI@two@d[1]{%
+  \ifnum#1<10 0\number#1\else \number#1\fi}
 
 % main
 
