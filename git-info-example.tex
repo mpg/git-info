@@ -1,17 +1,19 @@
-\documentclass[12pt]{article}
+\documentclass{article}
 \usepackage{git-info}
+\usepackage[cm]{fullpage}
 \usepackage{booktabs}
-\usepackage{bookman}
 \usepackage{parskip}
 
 \begin{document}
 
-\begin{tabular}{ll}\toprule
-{Git commit}       & \githeadcommit	\\
-{Git branch}       & \githeadbranch	\\
-{Git author}       & \githeadauthor	\\
-{Git mail}         & \githeadmail	\\
-{Git head datetime}& \githeaddatetime	\\
+\begin{tabular}{lll}\toprule
+\textbf{Command}			& \textbf{Description}	& \textbf{Contents}\\
+\midrule
+\texttt{\textbackslash githeadcommit}	& commit id	& \texttt{\githeadcommit}\\
+\texttt{\textbackslash githeadbranch}	& branch	& \texttt{\githeadbranch}\\
+\texttt{\textbackslash githeadauthor}	& author	& \githeadauthor\\
+\texttt{\textbackslash githeadmail}	& mail		& \texttt{\githeadmail}\\
+\texttt{\textbackslash githeaddatetime}	& head datetime	& \githeaddatetime\\
 \bottomrule
 \end{tabular}
 
