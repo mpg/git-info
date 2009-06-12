@@ -6,15 +6,6 @@ Check for unexpected EOF?
 Git logic
 ---------
 
-BUG: git-info currently chokes on lines like
-
-0000000000000000000000000000000000000000
-0f2a6a99d2995f59bb29e98248aa1ff92ca50669 Manuel Pégourié-Gonnard
-<mpg@elzevir.fr> 1242912163 +0000
-
-(no commit: <msg> at end), found in repositories imported from svn via git-svn.
-Sigh.
-
 What to do if HEAD is not a branch?
 
 General

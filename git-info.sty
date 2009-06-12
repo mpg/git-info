@@ -39,7 +39,7 @@
 \newcommand\GI@safe@reading{%
   \let\do\@makeother \dospecials
   \catcode32 10
-  \catcode08 10
+  \catcode09 12
   \endlinechar\m@ne
   \everyeof{\noexpand}}
 
@@ -136,9 +136,10 @@
   \begingroup \GI@safe@reading
   \GI@get@head@infos@loop}
 
+\count@\catcode09 \catcode09 12
 \newcommand\GI@get@head@infos@loop{%
   \read\GI@read to\GI@log@line
-  \expandafter\GI@infos@from@line\GI@log@line\@nil
+  \expandafter\GI@infos@from@line\GI@log@line^^09\@nil
   \ifx\GI@commit\GI@head@hash
     \expandafter\GI@get@head@infos@end
   \else
@@ -146,13 +147,16 @@
   \fi}
 
 \@ifdefinable\GI@infos@from@line{%
-  \def\GI@infos@from@line#1 #2 #3 <#4> #5 #6 #7\@nil{%
+  \def\GI@infos@from@line#1 #2 #3 <#4> #5 #6^^09#7\@nil{%
     \def\GI@commit{#2}%
     \def\GI@name{#3}%
     \def\GI@mail{#4}%
     \def\GI@timestamp{#5}%
     \def\GI@timezone{#6}%
+    % GI@what currently unused
+    % (don't forget to remove the spurious tab before using it latter)
     \def\GI@what{#7}}}
+\catcode09\count@
 
 \newcommand\GI@get@head@infos@end{%
   \closein\GI@read
