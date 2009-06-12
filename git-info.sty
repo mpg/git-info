@@ -27,7 +27,7 @@
 
 \newcommand\GI@export@macro[1]{%
   \edef\@tempa{\endgroup
-	\def\noexpand#1{#1}}%
+    \def\noexpand#1{#1}}%
   \@tempa}
 
 \newcommand\GI@set@export[2]{%
@@ -48,9 +48,9 @@
 \newcommand\GI@check@repo@prefix{%
   \GI@is@a@repo@true
   \IfFileExists{./\GI@head@file}{%
-	\edef\GI@repo@prefix{./}%
-	}{%
-	\GI@set@repo@prefix}}
+    \edef\GI@repo@prefix{./}%
+    }{%
+    \GI@set@repo@prefix}}
 
 \newcommand\GI@set@repo@prefix{%
   \begingroup \count@\GI@max@depth\relax
@@ -59,21 +59,21 @@
 \newcommand\GI@set@repo@prefix@{%
   \advance\count@\m@ne
   \ifnum\count@<\z@
-	\expandafter\GI@not@a@git@repo
+    \expandafter\GI@not@a@git@repo
   \else
-	\edef\GI@repo@prefix{../\GI@repo@prefix}%
-	\IfFileExists{\GI@head@file}{%
-	  \GI@export@macro\GI@repo@prefix
-	  }{%
-	  \expandafter\GI@set@repo@prefix@}%
+    \edef\GI@repo@prefix{../\GI@repo@prefix}%
+    \IfFileExists{\GI@head@file}{%
+      \GI@export@macro\GI@repo@prefix
+      }{%
+      \expandafter\GI@set@repo@prefix@}%
   \fi}
 
 \newcommand\GI@not@a@git@repo{%
   \endgroup
   \PackageWarning{git-info}{%
-	Current directory is not a git repository.\MessageBreak
-	No information about current HEAD is available.\MessageBreak
-	\protect\githead* commands are set to dummy values\@gobble}
+    Current directory is not a git repository.\MessageBreak
+    No information about current HEAD is available.\MessageBreak
+    \protect\githead* commands are set to dummy values\@gobble}
   \GI@is@a@repo@false
   \endinput}
 
@@ -87,11 +87,11 @@
   \GI@get@head@infos
   \GI@get@gen@datetime{head}%
   \edef\@tempa{\endgroup
-	\GI@set@export\githeadcommit{\githeadcommit}%
-	\GI@set@export\githeadbranch{\githeadbranch}%
-	\GI@set@export\githeadauthor{\githeadauthor}%
-	\GI@set@export\githeadmail{\githeadmail}%
-	\GI@set@export\GI@head@datetime{\GI@head@datetime}}%
+    \GI@set@export\githeadcommit{\githeadcommit}%
+    \GI@set@export\githeadbranch{\githeadbranch}%
+    \GI@set@export\githeadauthor{\githeadauthor}%
+    \GI@set@export\githeadmail{\githeadmail}%
+    \GI@set@export\GI@head@datetime{\GI@head@datetime}}%
   \@tempa}
 
 % finding the path to head
@@ -108,7 +108,7 @@
   \begingroup 
   \GI@safe@reading
   \edef\@tempa{\endgroup
-	\def\noexpand\GI@set@head@path\scantokens{ref:} }
+    \def\noexpand\GI@set@head@path\scantokens{ref:} }
   \@tempa#1\@nil{\def\GI@head@path{#1}}}
 
 % extracting the branch name from the path to head
@@ -118,7 +118,7 @@
 
  \@ifdefinable\GI@set@branch{%
    \def\GI@set@branch refs/heads/#1\@nil{%
-	 \def\githeadbranch{#1}}}
+     \def\githeadbranch{#1}}}
 
 % finding the hash (sha1) of head
 
@@ -140,28 +140,28 @@
   \read\GI@read to\GI@log@line
   \expandafter\GI@infos@from@line\GI@log@line\@nil
   \ifx\GI@commit\GI@head@hash
-	\expandafter\GI@get@head@infos@end
+    \expandafter\GI@get@head@infos@end
   \else
-	\expandafter\GI@get@head@infos@loop
+    \expandafter\GI@get@head@infos@loop
   \fi}
 
 \@ifdefinable\GI@infos@from@line{%
   \def\GI@infos@from@line#1 #2 #3 <#4> #5 #6 #7\@nil{%
-	\def\GI@commit{#2}%
-	\def\GI@name{#3}%
-	\def\GI@mail{#4}%
-	\def\GI@timestamp{#5}%
-	\def\GI@timezone{#6}%
-	\def\GI@what{#7}}}
+    \def\GI@commit{#2}%
+    \def\GI@name{#3}%
+    \def\GI@mail{#4}%
+    \def\GI@timestamp{#5}%
+    \def\GI@timezone{#6}%
+    \def\GI@what{#7}}}
 
 \newcommand\GI@get@head@infos@end{%
   \closein\GI@read
   \edef\@tempa{\endgroup
-	\GI@set@export\GI@head@timestamp{\GI@timestamp}%
-	\GI@set@export\GI@head@timezone{\GI@timezone}%
-	\GI@set@export\githeadcommit{\GI@commit}%
-	\GI@set@export\githeadauthor{\GI@name}%
-	\GI@set@export\githeadmail{\GI@mail}}%
+    \GI@set@export\GI@head@timestamp{\GI@timestamp}%
+    \GI@set@export\GI@head@timezone{\GI@timezone}%
+    \GI@set@export\githeadcommit{\GI@commit}%
+    \GI@set@export\githeadauthor{\GI@name}%
+    \GI@set@export\githeadmail{\GI@mail}}%
   \@tempa}
 
 % time conversions
@@ -187,30 +187,30 @@
 % \count@ = days since epoch (before), day of year (after)
 \newcommand\GI@extract@year{%
   \edef\GI@year{\number\numexpr\GI@int@quotient{\count@}{365}%
-	+\ifnum\count@<\GI@years@to@days{%
-	  \GI@int@quotient{\count@}{365}}1969 \else1970 \fi}%
+    +\ifnum\count@<\GI@years@to@days{%
+      \GI@int@quotient{\count@}{365}}1969 \else1970 \fi}%
   \advance\count@-\number\GI@years@to@days{\GI@year-1970}\relax}
 
 % sets month and day of month
 \newcommand\GI@extract@month@day{%
   \ifnum\GI@int@remainder{\GI@year}{4}=\z@
-	\ifnum\count@>58
-	  \ifnum\count@=59 \def\GI@hook{\def\GI@day{29}} \fi
-	  \advance\count@\m@ne
-	\fi
+    \ifnum\count@>58
+      \ifnum\count@=59 \def\GI@hook{\def\GI@day{29}} \fi
+      \advance\count@\m@ne
+    \fi
   \fi
   \countdef\GI@month\tw@ \GI@month\@ne
   \@for\GI@month@length:=31,28,31,30,31,30,31,31,30,31,30,31\do{%
-	\GI@extract@month@day@loop}%
+    \GI@extract@month@day@loop}%
   \csname GI@hook\endcsname}
 
 \newcommand\GI@extract@month@day@loop{%
   \ifnum\count@<\GI@month@length\relax
-	\edef\GI@day{\number\numexpr1+\count@}%
-	\let\GI@extract@month@day@loop\relax
+    \edef\GI@day{\number\numexpr1+\count@}%
+    \let\GI@extract@month@day@loop\relax
   \else
-	\advance\GI@month\@ne
-	\advance\count@-\GI@month@length
+    \advance\GI@month\@ne
+    \advance\count@-\GI@month@length
   \fi}
 
 \newcommand\GI@get@gen@datetime[1]{%
@@ -218,18 +218,18 @@
   \expandafter\expandafter\expandafter
   \GI@parse@timezone\csname GI@#1@timezone\endcsname
   \count@\numexpr\csname GI@#1@timestamp\endcsname
-	\GI@tzsign((\GI@tzhour*60+\GI@tzmin)*60)\relax
+    \GI@tzsign((\GI@tzhour*60+\GI@tzmin)*60)\relax
   \GI@extract@units\GI@sec{60}%
   \GI@extract@units\GI@min{60}%
   \GI@extract@units\GI@hour{24}%
   \GI@extract@year
   \GI@extract@month@day
   \edef\GI@datetime{%
-	{\GI@year}{\GI@two@d{\the\GI@month}}{\GI@two@d\GI@day}%
-	{\GI@two@d\GI@hour}{\GI@two@d\GI@min}{\GI@two@d\GI@sec}%
-	{\GI@tzsign}{\GI@two@d\GI@tzhour}{\GI@two@d\GI@tzmin}}%
+    {\GI@year}{\GI@two@d{\the\GI@month}}{\GI@two@d\GI@day}%
+    {\GI@two@d\GI@hour}{\GI@two@d\GI@min}{\GI@two@d\GI@sec}%
+    {\GI@tzsign}{\GI@two@d\GI@tzhour}{\GI@two@d\GI@tzmin}}%
   \edef\@tempa{\endgroup
-	\GI@set@export@name{GI@#1@datetime}{\GI@datetime}}
+    \GI@set@export@name{GI@#1@datetime}{\GI@datetime}}
   \@tempa}
 
 \newcommand\GI@parse@timezone[5]{%
@@ -242,7 +242,7 @@
 
 % displaying date - internal macros
 
-\newcommand\GI@dt@date	  [9] {#1-#2-#3}
+\newcommand\GI@dt@date    [9] {#1-#2-#3}
 \newcommand\GI@dt@time    [9] {#4:#5:#6}
 \newcommand\GI@dt@timezone[9] {#7#8:#9}
 \newcommand\GI@dt@datetime[9] {#1-#2-#3T#4:#5:#6#7#8:#9}
@@ -259,34 +259,34 @@
 
 \newcommand\GI@dt@today[9]{%
   \@ifundefined{today}{%
-	\PackageError{git-info}{%
-	  \noexpand\today undefined! Did you load babel?}{%
-	  You cannot use \noexpand\gitXXXtoday macros if
-	  \noexpand\today is undefined.\MessageBreak
-	  This macro is usually defined by the babel package.}%
-	}{%
-	\begingroup
-	\year#1 \month#2 \day#3
-	\today
-	\endgroup}}
+    \PackageError{git-info}{%
+      \noexpand\today undefined! Did you load babel?}{%
+      You cannot use \noexpand\gitXXXtoday macros if
+      \noexpand\today is undefined.\MessageBreak
+      This macro is usually defined by the babel package.}%
+    }{%
+    \begingroup
+    \year#1 \month#2 \day#3
+    \today
+    \endgroup}}
 
 % displaying date - defining user macros
 
 \newcommand\GI@def@dt@macro[2]{%
   \begingroup \edef\@tempa{\endgroup
-	\noexpand\newcommand
-	\expandafter\noexpand\csname git#1#2\endcsname{%
-	  \noexpand\expandafter
-	  \expandafter\noexpand\csname GI@dt@#2\endcsname
-	  \expandafter\noexpand\csname GI@#1@datetime\endcsname}}%
+    \noexpand\newcommand
+    \expandafter\noexpand\csname git#1#2\endcsname{%
+      \noexpand\expandafter
+      \expandafter\noexpand\csname GI@dt@#2\endcsname
+      \expandafter\noexpand\csname GI@#1@datetime\endcsname}}%
   \@tempa}
 
 \newcommand\GI@def@dt@gen[1]{%
   \begingroup \edef\@tempa{\endgroup
-	\noexpand\newcommand
-	\expandafter\noexpand\csname git#1dtformat\endcsname[1]{%
-	  \unexpanded{\expandafter##1}%
-	  \expandafter\noexpand\csname GI@#1@datetime\endcsname}}%
+    \noexpand\newcommand
+    \expandafter\noexpand\csname git#1dtformat\endcsname[1]{%
+      \unexpanded{\expandafter##1}%
+      \expandafter\noexpand\csname GI@#1@datetime\endcsname}}%
   \@tempa}
 
 \newcommand\GI@def@dt@collection[1]{%
