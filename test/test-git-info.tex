@@ -9,16 +9,28 @@
 ]{git-info}
 
 \makeatletter
+\newcommand\stypeout[1]{%
+  \immediate\write\@unused{#1}}
+\makeatother
+
+\newcommand\showval[2]{%
+  \stypeout{#2: -=|#1|=-}}
+\newcommand\testsec[1]{%
+  \stypeout{^^J#1}}
+
+\makeatletter
 \newcommand\testdate[3][+0000]{%
   \begingroup
-  \def\GI@head@timestamp{#2}%
-  \def\GI@head@timezone{#1}%
-  \GI@get@gen@datetime{head}%
-  \message{^^J#2#1:^^JMacro: \githeaddatetime}%
-  \message{^^JReal: \space#3}%
+  \def\GI@timestamp{#2}%
+  \def\GI@timezone{#1}%
+  \GI@compute@datetime
+  \stypeout{#2#1:^^JMacro: \expandafter\GI@dtmac@datetime\GI@datetime}
+  \stypeout{Real: \space#3}%
   \endgroup}
 \makeatother
 
+% %% from the output of gen-test.php
+% \testsec{Date internal macros}
 % \testdate{0}{1970-01-01T00:00:00+00:00}
 % \testdate{2865906}{1970-02-03T04:05:06+00:00}
 % \testdate{31535999}{1970-12-31T23:59:59+00:00}
@@ -31,15 +43,14 @@
 % \testdate{983404799}{2001-02-28T23:59:59+00:00}
 % \testdate{983404800}{2001-03-01T00:00:00+00:00}
 
-\newcommand\showval[2]{%
-  \message{^^J#2: -=|#1|=-^^J}}
+% \testsec{Basic head info}
+% \showval{\gitinfo{@head}{commit}}      {Git head commit}
+% \showval{\gitinfo{@head}{branch}}      {Git head branch}
+% \showval{\gitinfo{@head}{author}}      {Git head author}
+% \showval{\gitinfo{@head}{mail}}        {Git head mail}
+% \showval{\gitinfo{@head}{dt@datetime}} {Git head datetime}
 
-\showval{\gitinfo{@head}{commit}}  {Git head commit}
-\showval{\gitinfo{@head}{branch}}  {Git head branch}
-\showval{\gitinfo{@head}{author}}  {Git head author}
-\showval{\gitinfo{@head}{mail}}    {Git head mail}
-\showval{\gitinfo{@head}{dt@datetime}} {Git head datetime}
-
+% \testsec{Default date formats -- head -- normal catcodes}
 % \showval{\gitinfo{@head}{dt@}}         {Git head dt (default)}
 % \showval{\gitinfo{@head}{dt}}          {Git head dt (empty)}
 % \showval{\gitinfo{@head}{dt@date}}     {Git head date}
@@ -55,15 +66,14 @@
 % \showval{\gitinfo{@head}{dt@tzhour}}   {Git head tzhour}
 % \showval{\gitinfo{@head}{dt@tzmin}}    {Git head tzmin}
 
-% dt may have catcode problems, so test also when @ is a letter
-%
+% \testsec{Default date formats -- head -- at a letter}
 % \makeatletter
-% \showval{\gitinfo{@head}{dt@datetime}} {Git head datetime (atletter)}
-% \showval{\gitinfo{@head}{dt@}}         {Git head dt (default) (atletter)}
-% \showval{\gitinfo{@head}{dt}}          {Git head dt (empty) (atletter)}
+% \showval{\gitinfo{@head}{dt@datetime}} {Git head datetime}
+% \showval{\gitinfo{@head}{dt@}}         {Git head dt (default)}
+% \showval{\gitinfo{@head}{dt}}          {Git head dt (empty)}
 % \makeatother
 
-% package options
+% \testsec{Package options}
 % \makeatletter
 % \showval\GI@max@depth{Internal value 'maxdepth'}
 % \showval\GI@gih@name{Internal value 'gihname'}
@@ -72,7 +82,7 @@
 \begin{document}
 
 % Not expandable, so must be tested in typesetting context only.
-% Githeadtoday: -=|\githeadtoday|=-\par
+% Git-head-today: -=|\gitinfo{@head}{dt@today}|=-\par
 
 % Testing error messages (not expandable)
 % \gitinfo{@head}{commit}

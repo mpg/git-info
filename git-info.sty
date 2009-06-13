@@ -126,13 +126,13 @@
   \GI@get@branch
   \GI@get@head@hash
   \GI@get@head@infos
-  \GI@get@gen@datetime{head}%
+  \GI@compute@datetime
   \edef\@tempa{\endgroup
     \GI@set@export\GI@@@head@commit{\GI@head@commit}%
     \GI@set@export\GI@@@head@branch{\GI@head@branch}%
     \GI@set@export\GI@@@head@author{\GI@head@author}%
     \GI@set@export\GI@@@head@mail{\GI@head@mail}%
-    \GI@set@export\GI@@@head@datetime{\GI@head@datetime}%
+    \GI@set@export\GI@@@head@datetime{\GI@datetime}%
     \GI@set@export\GI@@@head@ok{\empty}}%
   \@tempa}
 
@@ -203,8 +203,8 @@
 \newcommand\GI@get@head@infos@end{%
   \closein\GI@read
   \edef\@tempa{\endgroup
-    \GI@set@export\GI@head@timestamp{\GI@timestamp}%
-    \GI@set@export\GI@head@timezone{\GI@timezone}%
+    \GI@set@export\GI@timestamp{\GI@timestamp}%
+    \GI@set@export\GI@timezone{\GI@timezone}%
     \GI@set@export\GI@head@commit{\GI@commit}%
     \GI@set@export\GI@head@author{\GI@name}%
     \GI@set@export\GI@head@mail{\GI@mail}}%
@@ -259,11 +259,11 @@
     \advance\count@-\GI@month@length
   \fi}
 
-\newcommand\GI@get@gen@datetime[1]{%
+\newcommand\GI@compute@datetime{%
   \begingroup
   \expandafter\expandafter\expandafter
-  \GI@parse@timezone\csname GI@#1@timezone\endcsname
-  \count@\numexpr\csname GI@#1@timestamp\endcsname
+  \GI@parse@timezone\csname GI@timezone\endcsname
+  \count@\numexpr\csname GI@timestamp\endcsname
     \GI@tzsign((\GI@tzhour*60+\GI@tzmin)*60)\relax
   \GI@extract@units\GI@sec{60}%
   \GI@extract@units\GI@min{60}%
@@ -275,7 +275,7 @@
     {\GI@two@d\GI@hour}{\GI@two@d\GI@min}{\GI@two@d\GI@sec}%
     {\GI@tzsign}{\GI@two@d\GI@tzhour}{\GI@two@d\GI@tzmin}}%
   \edef\@tempa{\endgroup
-    \GI@set@export@name{GI@#1@datetime}{\GI@datetime}}
+    \GI@set@export@name{GI@datetime}{\GI@datetime}}
   \@tempa}
 
 \newcommand\GI@parse@timezone[5]{%
