@@ -4,7 +4,7 @@
 \usepackage[english]{babel}
 \usepackage{ted, trace}
 \usepackage[
-maxdepth=0,
+% maxdepth=0,
 % helper-file=nosuchfile.ext
 ]{git-info}
 
@@ -34,26 +34,34 @@ maxdepth=0,
 \newcommand\showval[2]{%
   \message{^^J#2: -=|#1|=-^^J}}
 
-% \showval{\gitinfo{@head}{commit}}{Git commit}
-% \showval{\gitinfo{@head}{branch}}{Git branch}
-% \showval{\gitinfo{@head}{author}}{Git author}
-% \showval{\gitinfo{@head}{mail}}{Git mail}
-% \showval{\gitinfo{@head}{datetime}}{Git head datetime}
+\showval{\gitinfo{@head}{commit}}  {Git head commit}
+\showval{\gitinfo{@head}{branch}}  {Git head branch}
+\showval{\gitinfo{@head}{author}}  {Git head author}
+\showval{\gitinfo{@head}{mail}}    {Git head mail}
+\showval{\gitinfo{@head}{dt@datetime}} {Git head datetime}
 
-% \showval\githeaddate{Git head date}
-% \showval\githeadtime{Git head time}
-% \showval\githeadtimezone{Git head timezone}
-% \showval\githeadyear{Git head year}
-% \showval\githeadmonth{Git head month}
-% \showval\githeadday{Git head day}
-% \showval\githeadhour{Git head hour}
-% \showval\githeadmin{Git head min}
-% \showval\githeadsec{Git head sec}
-% \showval\githeadtzsign{Git head tzsign}
-% \showval\githeadtzhour{Git head tzhour}
-% \showval\githeadtzmin{Git head tzmin}
-% \newcommand\myformat[9]{#1,#2,#3,#4,#5,#6,#7,#8,#9}
-% \showval{\githeaddtformat\myformat}{Git head dtformat}
+% \showval{\gitinfo{@head}{dt@}}         {Git head dt (default)}
+% \showval{\gitinfo{@head}{dt}}          {Git head dt (empty)}
+% \showval{\gitinfo{@head}{dt@date}}     {Git head date}
+% \showval{\gitinfo{@head}{dt@time}}     {Git head time}
+% \showval{\gitinfo{@head}{dt@timezone}} {Git head timezone}
+% \showval{\gitinfo{@head}{dt@year}}     {Git head year}
+% \showval{\gitinfo{@head}{dt@month}}    {Git head month}
+% \showval{\gitinfo{@head}{dt@day}}      {Git head day}
+% \showval{\gitinfo{@head}{dt@hour}}     {Git head hour}
+% \showval{\gitinfo{@head}{dt@min}}      {Git head min}
+% \showval{\gitinfo{@head}{dt@sec}}      {Git head sec}
+% \showval{\gitinfo{@head}{dt@tzsign}}   {Git head tzsign}
+% \showval{\gitinfo{@head}{dt@tzhour}}   {Git head tzhour}
+% \showval{\gitinfo{@head}{dt@tzmin}}    {Git head tzmin}
+
+% dt may have catcode problems, so test also when @ is a letter
+%
+% \makeatletter
+% \showval{\gitinfo{@head}{dt@datetime}} {Git head datetime (atletter)}
+% \showval{\gitinfo{@head}{dt@}}         {Git head dt (default) (atletter)}
+% \showval{\gitinfo{@head}{dt}}          {Git head dt (empty) (atletter)}
+% \makeatother
 
 % package options
 % \makeatletter
@@ -67,6 +75,6 @@ maxdepth=0,
 % Githeadtoday: -=|\githeadtoday|=-\par
 
 % Testing error messages (not expandable)
-\gitinfo{@head}{datetime}
+% \gitinfo{@head}{commit}
 
 \end{document}

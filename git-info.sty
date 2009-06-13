@@ -16,7 +16,7 @@
 
 \newcommand\gitinfo[2]{%
   \ifcsname GI@@#1@ok\endcsname
-    \csname GI@@#1@#2\endcsname
+    \GI@gitinfo{#1}{#2}%
   \else
     \PackageError{git-info}{%
       No information available for #1}{%
@@ -28,6 +28,27 @@
     \detokenize{(git-#1-#2)}%
   \fi}
 
+\newcommand\GI@gitinfo[2]{%
+  \GI@ifdt{#2}{%
+    \GI@gitinfo@date{#1}{#2}%
+    }{%
+    \csname GI@@#1@#2\endcsname}}
+
+\newcommand\GI@ifdt[1]{%
+  \GI@ifdt@#1dt\@nil}
+\@ifdefinable\GI@ifdt@{%
+  \def\GI@ifdt@#1dt#2\@nil{%
+    \GI@ifempty{#1}}}
+
+\newcommand\GI@gitinfo@date[2]{%
+  \expandafter\GI@gitinfo@date@\detokenize{#2@@}\@nil{#1}\@nil}
+\@ifdefinable\GI@gitfinfo@date@{%
+  \begingroup \edef\@tempa{\endgroup
+    \def\noexpand\GI@gitinfo@date@
+    \detokenize{dt@}##1\string @}\@tempa#2\@nil#3\@nil{%
+    \csname GI@dtmac@#1\expandafter\expandafter\expandafter\endcsname
+    \csname GI@@#3@datetime\endcsname}}
+
 % private values
 \newif\ifGI@is@a@repo@
 
@@ -38,6 +59,13 @@
 \@ifdefinable\GI@read{\let\GI@read\@inputcheck}
 
 % \TeX{}nical tools
+
+\newcommand\GI@ifempty[1]{%
+  \expandafter\ifx\expandafter\relax\detokenize{#1}\relax
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi}
 
 \newcommand\GI@export@macro[1]{%
   \edef\@tempa{\endgroup
@@ -258,24 +286,27 @@
 \newcommand\GI@two@d[1]{%
   \ifnum#1<10 0\number#1\else \number#1\fi}
 
-% displaying date - internal macros
+% displaying date - defining user macros
 
-\newcommand\GI@dt@date    [9] {#1-#2-#3}
-\newcommand\GI@dt@time    [9] {#4:#5:#6}
-\newcommand\GI@dt@timezone[9] {#7#8:#9}
-\newcommand\GI@dt@datetime[9] {#1-#2-#3T#4:#5:#6#7#8:#9}
+\newcommand\gitNewDateFormat[2]{%
+  \expandafter\newcommand\csname GI@dtmac@#1\endcsname[9]{#2}}
 
-\newcommand\GI@dt@year  [9] {#1}
-\newcommand\GI@dt@month [9] {#2}
-\newcommand\GI@dt@day   [9] {#3}
-\newcommand\GI@dt@hour  [9] {#4}
-\newcommand\GI@dt@min   [9] {#5}
-\newcommand\GI@dt@sec   [9] {#6}
-\newcommand\GI@dt@tzsign[9] {#7}
-\newcommand\GI@dt@tzhour[9] {#8}
-\newcommand\GI@dt@tzmin [9] {#9}
+\gitNewDateFormat{}         {#1-#2-#3 #4:#5}
+\gitNewDateFormat{datetime} {#1-#2-#3T#4:#5:#6#7#8:#9}
+\gitNewDateFormat{date}     {#1-#2-#3}
+\gitNewDateFormat{time}     {#4:#5:#6}
+\gitNewDateFormat{timezone} {#7#8:#9}
+\gitNewDateFormat{year}     {#1}
+\gitNewDateFormat{month}    {#2}
+\gitNewDateFormat{day}      {#3}
+\gitNewDateFormat{hour}     {#4}
+\gitNewDateFormat{min}      {#5}
+\gitNewDateFormat{sec}      {#6}
+\gitNewDateFormat{tzsign}   {#7}
+\gitNewDateFormat{tzhour}   {#8}
+\gitNewDateFormat{tzmin}    {#9}
 
-\newcommand\GI@dt@today[9]{%
+\gitNewDateFormat{today}{%
   \@ifundefined{today}{%
     \PackageError{git-info}{%
       \noexpand\today undefined! Did you load babel?}{%
@@ -287,44 +318,6 @@
     \year#1 \month#2 \day#3
     \today
     \endgroup}}
-
-% displaying date - defining user macros
-
-\newcommand\GI@def@dt@macro[2]{%
-  \begingroup \edef\@tempa{\endgroup
-    \noexpand\newcommand
-    \expandafter\noexpand\csname git#1#2\endcsname{%
-      \noexpand\expandafter
-      \expandafter\noexpand\csname GI@dt@#2\endcsname
-      \expandafter\noexpand\csname GI@#1@datetime\endcsname}}%
-  \@tempa}
-
-\newcommand\GI@def@dt@gen[1]{%
-  \begingroup \edef\@tempa{\endgroup
-    \noexpand\newcommand
-    \expandafter\noexpand\csname git#1dtformat\endcsname[1]{%
-      \unexpanded{\expandafter##1}%
-      \expandafter\noexpand\csname GI@#1@datetime\endcsname}}%
-  \@tempa}
-
-\newcommand\GI@def@dt@collection[1]{%
-  \GI@def@dt@macro{#1}{today}%
-  \GI@def@dt@macro{#1}{datetime}%
-  \GI@def@dt@macro{#1}{date}%
-  \GI@def@dt@macro{#1}{time}%
-  \GI@def@dt@macro{#1}{timezone}%
-  \GI@def@dt@macro{#1}{year}%
-  \GI@def@dt@macro{#1}{month}%
-  \GI@def@dt@macro{#1}{day}%
-  \GI@def@dt@macro{#1}{hour}%
-  \GI@def@dt@macro{#1}{min}%
-  \GI@def@dt@macro{#1}{sec}%
-  \GI@def@dt@macro{#1}{tzsign}%
-  \GI@def@dt@macro{#1}{tzhour}%
-  \GI@def@dt@macro{#1}{tzmin}%
-  \GI@def@dt@gen{#1}}
-
-\GI@def@dt@collection{head}
 
 % main
 
