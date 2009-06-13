@@ -1,10 +1,12 @@
 % Experimental git-info package
 \ProvidesPackage{git-info}[2009/06/12 v0.11 Using informations from git. (mpg)]
 
-\newif\ifGI@delay@
-\DeclareOption{delay}{\GI@delay@true}
+\RequirePackage{xkeyval}
 
-\ProcessOptions
+\newif\ifGI@delay@
+\DeclareOptionX{delay}[]{\GI@delay@true}
+
+\ProcessOptionsX
 
 % initialisations
 

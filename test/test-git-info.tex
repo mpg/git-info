@@ -3,7 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage{ted, trace}
-\usepackage[delay]{git-info}
+\usepackage{git-info}
 
 \makeatletter
 \newcommand\testdate[3][+0000]{%
@@ -31,7 +31,7 @@
 \newcommand\showval[2]{%
   \message{^^J#2: -=|#1|=-^^J}}
 
-\gitgetinfos
+% \gitgetinfos
 
 \showval\githeadcommit{Git commit}
 \showval\githeadbranch{Git branch}
