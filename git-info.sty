@@ -5,11 +5,9 @@
 
 
 % macros and tests for options
-\newif\ifGI@delay@
 \newcommand\GI@max@depth{8}
 \newcommand\GI@gih@name{git-info.gih}
 
-\DeclareOptionX{delay}[]{\GI@delay@true}
 \DeclareOptionX{maxdepth}{\renewcommand\GI@max@depth{#1}}
 
 \ProcessOptionsX
@@ -323,21 +321,7 @@
 
 % main
 
-\newcommand\gitgetinfos{%
-  \GI@check@repo@prefix
-  \ifGI@is@a@repo@
-    \GI@get@head@all
-  \fi
-  \GI@getinfos@twice}
-
-\newcommand\GI@getinfos@twice{%
-  \renewcommand\GI@getinfos@twice{%
-    \PackageInfo{git-info}{%
-      \noexpand\gitgetinfos used more than once\MessageBreak
-      or without the 'delay' package option.\MessageBreak
-      This is probably useless, but should not dot any harm.\MessageBreak
-      You may want to check your code anyway}}}
-
-\ifGI@delay@ \else
-  \gitgetinfos
+\GI@check@repo@prefix
+\ifGI@is@a@repo@
+  \GI@get@head@all
 \fi
