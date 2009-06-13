@@ -4,7 +4,7 @@
 \usepackage[english]{babel}
 \usepackage{ted, trace}
 \usepackage[
-% maxdepth=16,
+maxdepth=0,
 % helper-file=nosuchfile.ext
 ]{git-info}
 
@@ -34,11 +34,11 @@
 \newcommand\showval[2]{%
   \message{^^J#2: -=|#1|=-^^J}}
 
-\showval\githeadcommit{Git commit}
-\showval\githeadbranch{Git branch}
-\showval\githeadauthor{Git author}
-\showval\githeadmail{Git mail}
-\showval\githeaddatetime{Git head datetime}
+% \showval{\gitinfo{@head}{commit}}{Git commit}
+% \showval{\gitinfo{@head}{branch}}{Git branch}
+% \showval{\gitinfo{@head}{author}}{Git author}
+% \showval{\gitinfo{@head}{mail}}{Git mail}
+% \showval{\gitinfo{@head}{datetime}}{Git head datetime}
 
 % \showval\githeaddate{Git head date}
 % \showval\githeadtime{Git head time}
@@ -49,7 +49,7 @@
 % \showval\githeadhour{Git head hour}
 % \showval\githeadmin{Git head min}
 % \showval\githeadsec{Git head sec}
-% \showval\githeadtzsign{Git head tzsing}
+% \showval\githeadtzsign{Git head tzsign}
 % \showval\githeadtzhour{Git head tzhour}
 % \showval\githeadtzmin{Git head tzmin}
 % \newcommand\myformat[9]{#1,#2,#3,#4,#5,#6,#7,#8,#9}
@@ -64,6 +64,9 @@
 \begin{document}
 
 % Not expandable, so must be tested in typesetting context only.
-Githeadtoday: -=|\githeadtoday|=-\par
+% Githeadtoday: -=|\githeadtoday|=-\par
+
+% Testing error messages (not expandable)
+\gitinfo{@head}{datetime}
 
 \end{document}

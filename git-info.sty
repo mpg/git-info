@@ -12,14 +12,21 @@
 
 \ProcessOptionsX
 
-% initialisations
+% main user macro
 
-% public values
-\newcommand\githeadauthor{GITHEADAUTHOR}
-\newcommand\githeadmail{GITHEADMAIL}
-\newcommand\githeadcommit{GITHEADCOMMIT}
-\newcommand\githeadbranch{GITHEADBRANCH}
-\newcommand\GI@head@datetime{{1970}{01}{01}{00}{00}{00}{+}{00}{00}}
+\newcommand\gitinfo[2]{%
+  \ifcsname GI@@#1@ok\endcsname
+    \csname GI@@#1@#2\endcsname
+  \else
+    \PackageError{git-info}{%
+      No information available for #1}{%
+      Possible causes are:\MessageBreak
+      - for @head: you are not in a git repository.\MessageBreak
+      - for @latest, @current, or a file: you did not\MessageBreak
+      set up git-info-helper properly or forgot to\MessageBreak
+      use \protect\gitfile{#1} or \protect\gitfile{<anything>}.}%
+    \detokenize{(git-#1-#2)}%
+  \fi}
 
 % private values
 \newif\ifGI@is@a@repo@
@@ -77,10 +84,9 @@
 
 \newcommand\GI@not@a@git@repo{%
   \endgroup
-  \PackageWarning{git-info}{%
+  \PackageWarningNoLine{git-info}{%
     Current directory is not a git repository.\MessageBreak
-    No information about current HEAD is available.\MessageBreak
-    \protect\githead* commands are set to dummy values\@gobble}
+    \protect\gitinfo{@head} will NOT work}%
   \GI@is@a@repo@false
   \endinput}
 
@@ -94,11 +100,12 @@
   \GI@get@head@infos
   \GI@get@gen@datetime{head}%
   \edef\@tempa{\endgroup
-    \GI@set@export\githeadcommit{\githeadcommit}%
-    \GI@set@export\githeadbranch{\githeadbranch}%
-    \GI@set@export\githeadauthor{\githeadauthor}%
-    \GI@set@export\githeadmail{\githeadmail}%
-    \GI@set@export\GI@head@datetime{\GI@head@datetime}}%
+    \GI@set@export\GI@@@head@commit{\GI@head@commit}%
+    \GI@set@export\GI@@@head@branch{\GI@head@branch}%
+    \GI@set@export\GI@@@head@author{\GI@head@author}%
+    \GI@set@export\GI@@@head@mail{\GI@head@mail}%
+    \GI@set@export\GI@@@head@datetime{\GI@head@datetime}%
+    \GI@set@export\GI@@@head@ok{\empty}}%
   \@tempa}
 
 % finding the path to head
@@ -125,7 +132,7 @@
 
  \@ifdefinable\GI@set@branch{%
    \def\GI@set@branch refs/heads/#1\@nil{%
-     \def\githeadbranch{#1}}}
+     \def\GI@head@branch{#1}}}
 
 % finding the hash (sha1) of head
 
@@ -170,9 +177,9 @@
   \edef\@tempa{\endgroup
     \GI@set@export\GI@head@timestamp{\GI@timestamp}%
     \GI@set@export\GI@head@timezone{\GI@timezone}%
-    \GI@set@export\githeadcommit{\GI@commit}%
-    \GI@set@export\githeadauthor{\GI@name}%
-    \GI@set@export\githeadmail{\GI@mail}}%
+    \GI@set@export\GI@head@commit{\GI@commit}%
+    \GI@set@export\GI@head@author{\GI@name}%
+    \GI@set@export\GI@head@mail{\GI@mail}}%
   \@tempa}
 
 % time conversions
