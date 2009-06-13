@@ -3,12 +3,12 @@
 
 \RequirePackage{xkeyval}
 
-
 % macros and tests for options
 \newcommand\GI@max@depth{8}
 \newcommand\GI@gih@name{git-info.gih}
 
 \DeclareOptionX{maxdepth}{\renewcommand\GI@max@depth{#1}}
+\DeclareOptionX{helper-file}{\renewcommand\GI@gih@name{#1}}
 
 \ProcessOptionsX
 

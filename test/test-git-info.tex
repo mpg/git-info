@@ -3,7 +3,10 @@
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage{ted, trace}
-\usepackage[maxdepth=16]{git-info}
+\usepackage[
+% maxdepth=16,
+% helper-file=nosuchfile.ext
+]{git-info}
 
 \makeatletter
 \newcommand\testdate[3][+0000]{%
@@ -53,8 +56,10 @@
 % \showval{\githeaddtformat\myformat}{Git head dtformat}
 
 % package options
-\makeatletter
-\showval\GI@max@depth{Internal value 'maxdepth'}
+% \makeatletter
+% \showval\GI@max@depth{Internal value 'maxdepth'}
+% \showval\GI@gih@name{Internal value 'gihname'}
+% \makeatother
 
 \begin{document}
 
