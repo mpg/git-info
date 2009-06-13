@@ -73,6 +73,10 @@
 % \showval{\gitinfo{@head}{dt}}          {Git head dt (empty)}
 % \makeatother
 
+\testsec{New date format}
+\gitNewDateFormat{list}{(#1,#2,#3,#4,#5,#6,#7,#8,#9)}
+\showval{\gitinfo{@head}{dt@list}} {Git head custom date format}
+
 % \testsec{Package options}
 % \makeatletter
 % \showval\GI@max@depth{Internal value 'maxdepth'}

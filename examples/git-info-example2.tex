@@ -1,15 +1,16 @@
 \documentclass[12pt]{article}
 \usepackage{git-info}
 \usepackage{fancyhdr}
+\usepackage[a4paper, headheight=15pt]{geometry}
 
 \author{Fiend O'Git}
 \title{All Work and No Play}
-\date{\today\\{\footnotesize (GIT ID: \texttt{\githeadcommit})}}
+\date{\today\\{\footnotesize (GIT ID: \texttt{\gitinfo{@head}{commit}})}}
 
 \pagestyle{fancy}
 \fancyhf[LH]{\emph{All Work and No Play}}
 \fancyhf[RH]{\emph{O'Git}}
-\fancyhf[LF]{\fbox{\footnotesize GIT ID: \texttt{\githeadcommit}}}
+\fancyhf[LF]{\fbox{\footnotesize GIT ID: \texttt{\gitinfo{@head}{commit}}}}
 \fancyhf[CF]{}
 \fancyhf[RF]{\thepage}
 \thispagestyle{empty}

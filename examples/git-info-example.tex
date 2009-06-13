@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc} % git information is supposed to be utf-8
+\usepackage[T1]{fontenc}
+\usepackage{git-info}
+\usepackage[cm, plain]{fullpage}
+\usepackage{booktabs}
+\usepackage{parskip}
+\usepackage[english]{babel}
+
+\begin{document}
+
+\begin{tabular}{lll}
+  \toprule
+  \textbf{Command}                 & \textbf{Description} & \textbf{Contents} \\
+  \midrule
+  \verb+\gitinfo{@head}{commit}+   & commit id     & \gitinfo{@head}{commit} \\
+  \verb+\gitinfo{@head}{branch}+   & branch        & \gitinfo{@head}{branch} \\
+  \verb+\gitinfo{@head}{author}+   & author        & \gitinfo{@head}{author} \\
+  \verb+\gitinfo{@head}{mail}+     & mail          & \gitinfo{@head}{mail} \\
+  \verb+\gitinfo{@head}{dt}+       & head datetime & \gitinfo{@head}{dt} \\
+  \bottomrule
+\end{tabular}
+
+\bigskip
+
+\begin{tabular}{lll}
+  \toprule
+  \textbf{Date format} & \textbf{Description} & \textbf{Example} \\
+  \midrule
+  \verb+dt+            & default              & \gitinfo{@head}{dt} \\
+  \verb+dt@+           & alt. syntax          & \gitinfo{@head}{dt@} \\
+  \verb+dt@today+      & babel format         & \gitinfo{@head}{dt@today} \\
+  \verb+dt@datetime+   & iso style, full      & \gitinfo{@head}{dt@datetime} \\
+  \verb+dt@date+       & date only            & \gitinfo{@head}{dt@date} \\
+  \verb+dt@time+       & full time            & \gitinfo{@head}{dt@time} \\
+  \verb+dt@timezone+   & timezone             & \gitinfo{@head}{dt@timezone} \\
+  \bottomrule
+\end{tabular}
+
+\bigskip
+
+Defining a new \verb+dt+ format: \verb+\gitNewDateFormat+. Eg, the standard
+format \verb+datetime+ is defined using: 
+\begin{verbatim}
+\gitNewDateFormat{datetime}{#1-#2-#3T#4:#5:#6#7#8:#9}
+\end{verbatim}
+in \texttt{git-info.sty}.
+
+\end{document}
