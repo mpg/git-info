@@ -6,17 +6,26 @@
 
 
 This an early version of the git-info LaTeX package, not yet suitable for
-distribution on the CTAN, but maybe still usable.  Currently, there is only one
-feature and no documentation besides this readme.
+distribution on the CTAN, but maybe still usable.  However, be warned that
+everything may change without warning until the package is published on CTAN.
+
+Currently, there is only one feature and no documentation besides this readme
+and the example files.
 
 The feature is, if you load git-info in a document lying in a git repository,
 the package defines a few macros containing information about the current HEAD:
 - hash, committer and date of the last commit,
 - current branch.
-See the test file for the full list of macros available.
+See the example and test files for the full list of macros available.
+
+The package has two options, only one of which is used atm: 'maxdepth=N', whose
+default value is 8. It is the maximum allowed depth (in terms of directory
+level) of the current directory relative to the root of the git repo. Make it
+bigger than if 8 is not enough for you and git-info fails with a error like
+"this is not a git repository".
 
 Git-info works by parsing some plain-text files in the git repository in pure
-TeX.  There is currently some restrictions : the current HEAD must be a branch,
+TeX.  There is currently some restrictions : eg, the current HEAD must be a branch,
 not detached; and probably other restrictions I am not aware of, due to my poor
 knowledge of git (internals).
 
