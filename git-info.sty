@@ -3,8 +3,14 @@
 
 \RequirePackage{xkeyval}
 
+
+% macros and tests for options
 \newif\ifGI@delay@
+\newcommand\GI@max@depth{8}
+\newcommand\GI@gih@name{git-info.gih}
+
 \DeclareOptionX{delay}[]{\GI@delay@true}
+\DeclareOptionX{maxdepth}{\renewcommand\GI@max@depth{#1}}
 
 \ProcessOptionsX
 
@@ -16,10 +22,6 @@
 \newcommand\githeadcommit{GITHEADCOMMIT}
 \newcommand\githeadbranch{GITHEADBRANCH}
 \newcommand\GI@head@datetime{{1970}{01}{01}{00}{00}{00}{+}{00}{00}}
-
-% semi-private settings
-\newcommand\GI@max@depth{8}
-\newcommand\GI@gih@name{git-info.gih}
 
 % private values
 \newif\ifGI@is@a@repo@
