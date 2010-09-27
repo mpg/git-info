@@ -3,6 +3,10 @@ Error handling
 
 Check for unexpected EOF?
 
+Bug reproducer in bug-th/ (highly non-minimal). Fix this bug. (No kidding.)
+
+Make a test suite.
+
 Git logic
 ---------
 
@@ -10,6 +14,9 @@ What to do if HEAD is not a branch?
 
 General
 -------
+
+Should probably \input files rather than \read them (better for automatic
+dependency tools such as latexmk).
 
 Use .gih file.
 
@@ -19,3 +26,9 @@ Find the most recently commited file à la svn-multi.
 
 Write doc: user, hook, code...
 
+doc: document how to run the helper scrit via a git hook or using latexmk.
+
+See also
+--------
+
+http://tex.stackexchange.com/questions/161/latex-packages-for-use-with-revision-control
