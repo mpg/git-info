@@ -3,9 +3,11 @@
 \usepackage{fancyhdr}
 \usepackage[a4paper, headheight=15pt]{geometry}
 
-\author{Fiend O'Git}
+\author{Fiend O'Git\\
+  {\footnotesize (last modified by: \gitinfo{@head}{author})}}
 \title{All Work and No Play}
-\date{\today\\{\footnotesize (GIT ID: \texttt{\gitinfo{@head}{commit}})}}
+\date{\gitinfo{@head}{dt@today}\\
+  {\footnotesize (GIT ID: \texttt{\gitinfo{@head}{commit}})}}
 
 \pagestyle{fancy}
 \fancyhf[LH]{\emph{All Work and No Play}}
